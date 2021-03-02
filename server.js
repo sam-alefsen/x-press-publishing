@@ -21,6 +21,10 @@ app.use(cors());
 const morgan = require('morgan');
 app.use(morgan('dev'));
 
+//import api router
+const apiRouter = require('./api/api');
+app.use('/api', apiRouter);
+
 app.listen(PORT, () => {
   console.log(`Now listening on PORT ${PORT}`);
 });
