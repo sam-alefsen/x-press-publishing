@@ -1,4 +1,9 @@
-const express = require('express');
+//Import items
+const bodyParser = require('body-parser')
+  , cors = require('cors')
+  , errorhandler = require('errorhandler')
+  , express = require('express')
+  , morgan = require('morgan');
 const app = express();
 
 const PORT = process.env.PORT || 4001;
@@ -6,24 +11,20 @@ const PORT = process.env.PORT || 4001;
 app.use(express.static('.'));
 
 //body parsing
-const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-//error handling (dev environment only)
-const errorhandler = require('errorhandler');
-app.use(errorhandler());
-
 //cors
-const cors = require('cors');
 app.use(cors());
 
 //morgan
-const morgan = require('morgan');
 app.use(morgan('dev'));
 
 //import api router
 const apiRouter = require('./api/api');
 app.use('/api', apiRouter);
+
+//error handling (dev environment only)
+app.use(errorhandler());
 
 app.listen(PORT, () => {
   console.log(`Now listening on PORT ${PORT}`);

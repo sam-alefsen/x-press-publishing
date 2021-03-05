@@ -9,10 +9,12 @@ artistsRouter.param('artistId', (req, res, next, artistId) => {
   db.get('SELECT * FROM Artist WHERE id = $artistId', {$artistId:artistId}, (err, row) => {
     if (err) {
       next(err);
-    } else {
+    } else if(row) {
       req.artist = row;
       next();
-    }
+    } else {
+      res.sendStatus(404);
+    };
   });
 });
 
@@ -27,6 +29,11 @@ artistsRouter.get('/', (req, res, next) => {
         res.status(200).json({artists:rows});
       };
   });
+});
+
+//GET a single artist by ID
+artistsRouter.get('/:artistId', (req, res, next) => {
+  res.status(200).json({artist:req.artist});
 });
 
 module.exports = artistsRouter;
