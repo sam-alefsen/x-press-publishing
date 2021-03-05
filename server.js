@@ -1,6 +1,5 @@
 //Import items
-const bodyParser = require('body-parser')
-  , cors = require('cors')
+const cors = require('cors')
   , errorhandler = require('errorhandler')
   , express = require('express')
   , morgan = require('morgan');
@@ -11,7 +10,7 @@ const PORT = process.env.PORT || 4001;
 app.use(express.static('.'));
 
 //body parsing
-app.use(bodyParser.json());
+app.use(express.json());
 
 //cors
 app.use(cors());
