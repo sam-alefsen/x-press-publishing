@@ -68,4 +68,39 @@ artistsRouter.post('/', (req, res, next) => {
   };
 });
 
+//Update an artist
+artistsRouter.put('/:artistId', (req, res, next) => {
+  const artist = req.body.artist;
+  if (!artist.name || !artist.dateOfBirth || !artist.biography) {
+    return res.sendStatus(400);
+  } else {
+    const sql = 'UPDATE Artist SET name = $name, date_of_birth = $dateOfBirth, biography = $biography, is_currently_employed = $isCurrentlyEmployed WHERE Artist.id = $artistId';
+
+    const values = {
+      $name: artist.name,
+      $dateOfBirth: artist.dateOfBirth,
+      $biography: artist.biography,
+      $isCurrentlyEmployed: artist.isCurrentlyEmployed,
+      $artistId: req.params.artistId
+    };
+ 
+    db.run(sql, values, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        //code works with object literals
+        //why doesn't this.lastID work here?
+        db.get(`SELECT * FROM Artist WHERE id = ${req.params.artistId}`, (err, row) => {
+          if (err) {
+            next(err);
+          } else {
+            res.status(200).json({artist:row});
+          };
+        });
+      };
+    });
+
+  };
+});
+
 module.exports = artistsRouter;
