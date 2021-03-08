@@ -103,4 +103,22 @@ artistsRouter.put('/:artistId', (req, res, next) => {
   };
 });
 
+//set artist to unemployed with DELETE request
+artistsRouter.delete('/:artistId', (req, res, next) => {
+  db.run(`UPDATE Artist SET is_currently_employed = 0 WHERE Artist.id = ${req.params.artistId}`, (err, row) => {
+    if (err) {
+      next(err);
+    } else {
+      db.get(`SELECT * FROM Artist WHERE Artist.id = ${req.params.artistId}`, (err, row) => {
+        if (err) {
+          next(err);
+        } else {
+          res.status(200).json({artist:row});
+        };
+      });
+    };
+  });
+});
+
+
 module.exports = artistsRouter;
