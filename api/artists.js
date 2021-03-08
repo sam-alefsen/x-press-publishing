@@ -54,7 +54,7 @@ artistsRouter.post('/', (req, res, next) => {
         next(err);
       } else {
         //Retrieve newly created artist with last ID to place in response. Requires this containing function to not be an arrow function.
-        db.get('SELECT * FROM Artist WHERE ID = $lastID', {
+        db.get('SELECT * FROM Artist WHERE id = $lastID', {
           $lastID: this.lastID
         }, (err, row) => {
           if (err) {
